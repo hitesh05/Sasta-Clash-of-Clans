@@ -93,6 +93,7 @@ Sasta Clash of Clans is inspired from the widely popular game CoC.
     - King: The main guy of the invading party. Hitpoints = 100. Deals a damge = 10 health per shot. Initial speed of 1 which can be increased by using spells. Moves up/down/left/right. Space is used to attack. Health bar is displayed at the side of the screen. *Leviathan axe* implemented. Attacks any building in a 5 tile radius. 
     - Barbaians: 3 spawning points, controlled by 3 different buttons. When you press the button, they appear the button and their movements from then on are automated. They move to the closest building from their coordinate (according to Euclidean distance), and when they reach the building they attack. Hitpoints = 20. Deal a damage of 5 health per shot. Can be increased using spells. The colour of the barbarian dims when the less than 50% of the health is remaining.
     - Spells: Rage spell increases damage per shot (2 times) and movement speed (2 times) of all alive troops in the game. Can only be used once in the game. Heal spell icreases health (1.5 times) of all alive troops in the game. Can only be used once in the game.
+    - Replay: Replays of all the games played are available. Run the replay.py file and choose the game number you want to replay.
 
 + ### Controls
     - 'w' - move king 1 step up.
