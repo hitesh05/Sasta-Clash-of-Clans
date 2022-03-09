@@ -1,9 +1,9 @@
-from constants import *
+from src.constants import *
 from colorama import init, Fore, Back, Style
 
 init()
 
-
+# screen class
 class Screen:
     def __init__(this, rows, cols):
         this.cols = cols
@@ -14,7 +14,14 @@ class Screen:
             this.screen.append([])
             for j in range(this.cols):
                 this.screen[i].append(" ")
+                
+    def ret_rows(this):
+        return this.rows
+    
+    def ret_cols(this):
+        return this.cols
 
+    # display function plus writing to files for replay
     def display(this,iter,dir):
         name = str(iter)
         dir = str(dir)
@@ -34,10 +41,16 @@ class Screen:
                 elif tobeprinted == 4:
                     print(Back.RED + " " + Style.RESET_ALL, end="")
                     f.write(str(Back.RED + " " + Style.RESET_ALL))
+                elif tobeprinted == 5:
+                    print(Back.GREEN + " " + Style.RESET_ALL, end="")
+                    f.write(str(Back.GREEN + " " + Style.RESET_ALL))
+                elif tobeprinted == "B":
+                    print(Fore.CYAN + Style.BRIGHT + tobeprinted + Style.RESET_ALL, end = "")
+                    f.write(str(Fore.CYAN + Style.BRIGHT + tobeprinted + Style.RESET_ALL))
+                elif tobeprinted == "D":
+                    print(Fore.CYAN + Style.DIM + "B" + Style.RESET_ALL, end = "")
+                    f.write(str(Fore.CYAN + Style.DIM + tobeprinted + Style.RESET_ALL))
                 else:
                     print(tobeprinted, end="")
                     f.write(str(tobeprinted))
         f.close()
-        
-        
-

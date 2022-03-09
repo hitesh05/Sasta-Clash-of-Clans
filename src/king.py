@@ -1,24 +1,25 @@
-from constants import *
+from src.constants import *
 from colorama import init, Fore, Back, Style
 
 init()
 
-
+# King class
 class King:
     def __init__(this):
-        this.__total_health = 50
-        this.__health = 50
-        this.__row = game_ht[1] - 1
+        this.__total_health = 100 # total health of king
+        this.__health = 100
+        this.__row = game_ht[1] - 1 # starting point
         this.__col = game_wd[1] - 2
         this.__isdead = 0
         this.__speed = 1
         this.__damage = 10
-        this.__king = "K"
+        this.__king = "K" # symbil for king
 
+    # encapsulation
     def ret_total_health(this):
         return this.__total_health
-    
-    def upd_total_health(this,x):
+
+    def upd_total_health(this, x):
         this.__total_health = x
 
     def ret_health(this):
@@ -59,21 +60,33 @@ class King:
 
     def ret_king(this):
         return this.__king
+    
+    def on_attack(this, damage):
+        this.upd_health(this.ret_health() - damage)
+        if this.ret_health() <= 0:
+            this.upd_isdead(1)
 
     def reset(this):
-        this.upd_total_health(50)
-        this.upd_health(50)
+        this.upd_total_health(100)
+        this.upd_health(100)
         this.upd_row(game_ht[1] - 1)
         this.upd_col(game_wd[1] - 1)
         this.upd_isdead(0)
         this.upd_speed(1)
         this.upd_damage(10)
 
+    '''
+    "Abstraction" property implemented.
+    attacking when space is input by user
+    Leviathan axe implemented : 5x5 attack area
+    all buildings in this area are effected
+    '''
     def attack(this, screen, buildings):
         r = this.ret_row()
         c = this.ret_col()
         attack_area = set()
-
+        
+         # setting attack_area
         for i in range(5):
             for j in range(5):
                 attack_area.add((r + i, c + j))
@@ -81,14 +94,21 @@ class King:
                 attack_area.add((r - i, c + j))
                 attack_area.add((r - i, c - j))
 
-        if (
-            screen[r + 1][c] == 0
-            and screen[r][c - 1] == 0
-            and screen[r - 1][c] == 0
-            and screen[r][c + 1] == 0
-        ):
+        flag = 0
+        for i in range(5):
+            for j in range(5):
+                if (
+                    screen[r + i][c + j] != 0
+                    or screen[r + i][c - j] != 0
+                    or screen[r - i][c + j] != 0
+                    or screen[r - i][c - j] != 0
+                ):
+                    flag = 1
+
+        if flag == 0:
             return
 
+        # sword sound every time king attacks
         os.system("aplay -q ./sounds/sword.wav &")
 
         for building in buildings:
@@ -133,35 +153,42 @@ class King:
         c = this.ret_col()
         screen[r][c] = this.ret_king()
 
+    '''
+    Abstraction implemented again.
+    w: king moves up
+    a: king moves left
+    s: king moves right
+    d: king moves down
+    '''
     def move_up(this, screen):
         this.clear(screen)
         r = this.ret_row()
         c = this.ret_col()
         if r != 0:
-            if screen[r - 1][c] == " ":
-                this.upd_row(r - 1)
+            if screen[r - this.ret_speed()][c] == " ":
+                this.upd_row(r - this.ret_speed())
 
     def move_down(this, screen):
         this.clear(screen)
         r = this.ret_row()
         c = this.ret_col()
         if r != game_ht[1] - 1:
-            if screen[r + 1][c] == " ":
-                this.upd_row(r + 1)
+            if screen[r + this.ret_speed()][c] == " ":
+                this.upd_row(r + this.ret_speed())
 
     def move_left(this, screen):
         this.clear(screen)
         r = this.ret_row()
         c = this.ret_col()
         if c != game_wd[0]:
-            if screen[r][c - 1] == " ":
-                this.upd_col(c - 1)
+            if screen[r][c - this.ret_speed()] == " ":
+                this.upd_col(c - this.ret_speed())
 
     def move_right(this, screen):
         this.clear(screen)
         r = this.ret_row()
         c = this.ret_col()
         if c != game_wd[1]:
-            if screen[r][c + 1] == " ":
-                this.upd_col(c + 1)
+            if screen[r][c + this.ret_speed()] == " ":
+                this.upd_col(c + this.ret_speed())
 

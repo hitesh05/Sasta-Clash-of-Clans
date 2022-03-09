@@ -1,6 +1,6 @@
-from constants import *
+from src.constants import *
 
-
+# setting the background
 class Background:
     def __init__(this):
         this.rows = game_ht

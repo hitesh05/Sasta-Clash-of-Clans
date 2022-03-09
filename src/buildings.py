@@ -1,18 +1,19 @@
 import os
-from constants import *
+from src.constants import *
 from colorama import init, Fore, Back, Style
 import random
 
 init()
 
 """
+Building, its colour on the terminal, and the number used to represent
 Town Hall: Yellow : 1
 Huts: Blue : 2
 Walls: Magenta : 3
-Cannon: red (?) : 4
+Cannon: red: 4 (5 and Blue while attacking)
 """
 
-
+# Buildings class: stores all the buildings that are generated
 class Buildings:
     def __init__(this):
         this.buildings = []
@@ -21,12 +22,14 @@ class Buildings:
             this.a.append([])
             for j in range(game_wd[1]):
                 this.a[i].append(0)
-
+                
+    # generating all the buildings
     def generator(this):
         this.hall_generator()
         this.hut_generator()
         this.cannon_generator()
 
+    # surrounds all the buildings by default
     def wall_generator(this, x):
         w = Wall()
         w.upd_col(this.col - 1)
@@ -40,6 +43,7 @@ class Buildings:
             w.upd_row_size(4)
         this.buildings.append(w)
 
+    # 4x3 size in the middle of the terminal
     def hall_generator(this):
         this.row = game_ht[1] // 2 - 2
         this.col = int(game_wd[1] / 1.7)
@@ -72,6 +76,7 @@ class Buildings:
             else:
                 return 1
 
+    # 2x2 size generated randomly
     def hut_generator(this):
         huts = 5
         while huts > 0:
@@ -94,8 +99,9 @@ class Buildings:
                             this.a[r + i][c + j] = 2
         return
 
+    # 1x1 size generated randomly
     def cannon_generator(this):
-        cannons = 5
+        cannons = 7
         while cannons > 0:
             this.row = random.randint(2, game_ht[1] // 1.2)
             this.col = random.randint(game_wd[0] + 5, game_wd[1] - 10)
@@ -108,6 +114,74 @@ class Buildings:
                 this.a[this.row][this.col] = 4
         return
 
+    # cannon attack functionwhen someone is in its vicinity (5 tile radius) : turns blue when its attacking
+    def cannon_attack(this, screen, king, barbarian1, barbarian2, barbarian3):
+        r_king = king.ret_row()
+        c_king = king.ret_col()
+        r_b1 = barbarian1.ret_row()
+        c_b1 = barbarian1.ret_col()
+        r_b2 = barbarian2.ret_row()
+        c_b2 = barbarian2.ret_col()
+        r_b3 = barbarian3.ret_row()
+        c_b3 = barbarian3.ret_col()
+        test1 = (r_king, c_king)
+        test2 = (r_b1, c_b1)
+        test3 = (r_b2, c_b2)
+        test4 = (r_b3, c_b3)
+        
+        for building in this.buildings:
+            if building.ret_type() == 4:
+                attack = False
+                if building.ret_isdestroyed() == 0:
+                    r = building.ret_row()
+                    c = building.ret_col()
+                    attack_area = set()
+
+                    for i in range(5):
+                        for j in range(5):
+                            attack_area.add((r + i, c + j))
+                            attack_area.add((r + i, c - j))
+                            attack_area.add((r - i, c + j))
+                            attack_area.add((r - i, c - j))
+
+                    flag = 0
+                    for i in range(5):
+                        for j in range(5):
+                            if (
+                                screen[r + i][c + j] != 0
+                                or screen[r + i][c - j] != 0
+                                or screen[r - i][c + j] != 0
+                                or screen[r - i][c - j] != 0
+                            ):
+                                flag = 1
+
+                    if flag == 0:
+                        return
+
+                    if test1 in attack_area:
+                        if(king.ret_isdead() == 0):
+                            king.on_attack(2)
+                            attack = True
+                    elif test2 in attack_area:
+                        if(barbarian1.ret_isdead() == 0):
+                            barbarian1.on_attack(2)
+                            attack = True
+                    elif test3 in attack_area:
+                        if barbarian2.ret_isdead() == 0:
+                            barbarian2.on_attack(2)
+                            attack = True
+                    elif test4 in attack_area:
+                        if barbarian3.ret_isdead() == 0:
+                            barbarian3.on_attack(2)
+                            attack = True
+                    
+                    if(attack):
+                        screen[r][c] = 5
+                        os.system("aplay -q ./sounds/explosion.wav &")
+                    else:
+                        screen[r][c] = 4            
+        
+    # showing all the buildings
     def show(this, screen, x):
         for i in range(game_ht[1]):
             for j in range(game_wd[1]):
@@ -120,7 +194,7 @@ class Buildings:
                 if building.ret_isdestroyed() == 1:
                     for i in range(s1):
                         for j in range(s2):
-                            x.append("here")
+                            # x.append("here")
                             screen[building.ret_row() + i][building.ret_col() + j] = " "
 
             elif building.ret_type() == 3:
@@ -140,6 +214,8 @@ class Buildings:
                                 ] = " "
 
 
+# Inheritance implemented. Building is the parent class. Town Hall, Huts, Cannon, Wall are child classes.
+
 class Building:
     # Building Object
     def __init__(this):
@@ -151,6 +227,7 @@ class Building:
         this.__row_size = 0
         this.__col_size = 0
 
+    # encapsulation
     def ret_health(this):
         return this.__health
 
@@ -197,7 +274,6 @@ class Building:
         this.upd_health(this.ret_health() - damage)
         if this.ret_health() <= 0:
             this.upd_isdestroyed(1)
-            # os.system("aplay -q ./sounds/explosion.wav &")
 
 
 class TownHall(Building):
@@ -234,5 +310,5 @@ class Cannon(Building):
         this.upd_health(20)
         this.upd_row_size(1)
         this.upd_col_size(1)
-        this.range = 8  # 8 tiles
-        this.damage = 5  # 1 shot = 5 health
+        this.range = 5  # 8 tiles
+        this.damage = 2  # 1 shot = 2 health
