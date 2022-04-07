@@ -1,4 +1,4 @@
-from src.constants import *
+from constants import *
 from colorama import init, Fore, Back, Style
 
 init()
@@ -13,7 +13,7 @@ class King:
         this.__isdead = 0
         this.__speed = 1
         this.__damage = 10
-        this.__king = "K" # symbil for king
+        this.__king = "K" # symbol for king
 
     # encapsulation
     def ret_total_health(this):

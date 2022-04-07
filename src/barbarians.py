@@ -212,6 +212,8 @@ class Barbarians:
                         and screen[i][j] != "K"
                         and screen[i][j] != "B"
                         and screen[i][j] != "D"
+                        and screen[i][j] != "A"
+                        and screen[i][j] != "G"
                     ):
                         d = this.euclid_distance(r, c, i, j)
 

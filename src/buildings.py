@@ -28,6 +28,7 @@ class Buildings:
         this.hall_generator()
         this.hut_generator()
         this.cannon_generator()
+        this.tower_generator()
 
     # surrounds all the buildings by default
     def wall_generator(this, x):
@@ -69,8 +70,7 @@ class Buildings:
                     if this.a[r + i][c + j] != 0:
                         return 0
             return 1
-
-        elif x == 4:
+        elif x == 4 or x == 6:
             if this.a[r][c] != 0:
                 return 0
             else:
@@ -113,8 +113,23 @@ class Buildings:
                 cannons -= 1
                 this.a[this.row][this.col] = 4
         return
+    
+    def tower_generator(this):
+        towers = 2
+        while towers > 2:
+            this.row = random.randint(2, game_ht[1] // 1.2)
+            this.col = random.randint(game_wd[0] + 5, game_wd[1] - 10)
+            if this.building_check(this.row, this.col, 6):
+                w = WizardTower()
+                w.upd_col(this.col)
+                w.upd_row(this.row)
+                this.buildings.append(w)
+                towers -= 1
+                this.a[this.row][this.col] = 6
+        return
+            
 
-    # cannon attack functionwhen someone is in its vicinity (5 tile radius) : turns blue when its attacking
+    # cannon attack functio nwhen someone is in its vicinity (5 tile radius) : turns blue when its attacking
     def cannon_attack(this, screen, king, barbarian1, barbarian2, barbarian3):
         r_king = king.ret_row()
         c_king = king.ret_col()
@@ -310,5 +325,15 @@ class Cannon(Building):
         this.upd_health(20)
         this.upd_row_size(1)
         this.upd_col_size(1)
-        this.range = 5  # 8 tiles
+        this.range = 5  # 5 tiles
         this.damage = 2  # 1 shot = 2 health
+        
+class WizardTower(Building):
+    def __init__(this):
+        Building.__init__(this)
+        this.upd_type(6)
+        this.upd_health(20)
+        this.upd_row_size(1)
+        this.upd_col_size(1)
+        this.range = Cannon().range # same as cannon
+        this.damage = Cannon().damage
