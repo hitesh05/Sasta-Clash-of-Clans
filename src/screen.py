@@ -54,3 +54,13 @@ class Screen:
                     print(tobeprinted, end="")
                     f.write(str(tobeprinted))
         f.close()
+        
+class Level:
+    def __init__(this):
+        this.__value = 1
+        
+    def ret_level(this):
+        return this.__value
+    
+    def upd_level(this,x):
+        this.__value = x

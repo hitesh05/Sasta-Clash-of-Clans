@@ -174,7 +174,6 @@ class Archer:
         
                             test = (r1 + i, c1 + j)
                             if test in attack_area:
-            
                                 building.on_attack(this.ret_damage())
                                 flag = 1
                                 break
@@ -212,7 +211,7 @@ class Archer:
             x = 0
             y = 0
 
-            for i in range(game_ht[0] + 5, game_ht[1] - 1):
+            for i in range(game_ht[0] + 2, game_ht[1] - 1):
                 for j in range(game_wd[0]+2,game_wd[1]-2):
                     if (
                         screen[i][j] != " "
@@ -228,6 +227,17 @@ class Archer:
                             distance = d
                             x = i
                             y = j
+            
+            # for building in buildings:
+            #         i = building.ret_row()
+            #         j = building.ret_col()
+                    
+            #         if building.ret_isdestroyed() == 0:
+            #             d = this.euclid_distance(r, c, i, j)
+            #             if(d < distance):
+            #                 distance = d
+            #                 x = i
+            #                 y = j
 
             a, b = this.dist(r, c, x, y)
             if abs(a) <= this.ret_speed() and abs(b) <= this.ret_speed():

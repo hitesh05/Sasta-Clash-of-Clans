@@ -24,11 +24,11 @@ class Buildings:
                 this.a[i].append(0)
                 
     # generating all the buildings
-    def generator(this):
+    def generator(this, cannons, towers):
         this.hall_generator()
         this.hut_generator()
-        this.cannon_generator()
-        this.tower_generator()
+        this.cannon_generator(cannons)
+        this.tower_generator(towers)
 
     # surrounds all the buildings by default
     def wall_generator(this, x):
@@ -100,8 +100,8 @@ class Buildings:
         return
 
     # 1x1 size generated randomly
-    def cannon_generator(this):
-        cannons = 7
+    def cannon_generator(this, number):
+        cannons = number
         while cannons > 0:
             this.row = random.randint(2, game_ht[1] // 1.2)
             this.col = random.randint(game_wd[0] + 5, game_wd[1] - 10)
@@ -114,8 +114,8 @@ class Buildings:
                 this.a[this.row][this.col] = 4
         return
     
-    def tower_generator(this):
-        towers = 2
+    def tower_generator(this, number):
+        towers = number
         while towers > 2:
             this.row = random.randint(2, game_ht[1] // 1.2)
             this.col = random.randint(game_wd[0] + 5, game_wd[1] - 10)
@@ -130,7 +130,7 @@ class Buildings:
             
 
     # cannon attack functio nwhen someone is in its vicinity (5 tile radius) : turns blue when its attacking
-    def cannon_attack(this, screen, king, barbarian1, barbarian2, barbarian3):
+    def cannon_attack(this, screen, king, barbarian1, barbarian2, barbarian3, archer1, archer2, archer3):
         r_king = king.ret_row()
         c_king = king.ret_col()
         r_b1 = barbarian1.ret_row()
@@ -139,10 +139,19 @@ class Buildings:
         c_b2 = barbarian2.ret_col()
         r_b3 = barbarian3.ret_row()
         c_b3 = barbarian3.ret_col()
+        r_b4 = archer1.ret_row()
+        c_b4 = archer1.ret_col()
+        r_b5 = archer2.ret_row()
+        c_b5 = archer2.ret_col()
+        r_b6 = archer3.ret_row()
+        c_b6 = archer3.ret_col()
         test1 = (r_king, c_king)
         test2 = (r_b1, c_b1)
         test3 = (r_b2, c_b2)
         test4 = (r_b3, c_b3)
+        test5 = (r_b4, c_b4)
+        test6 = (r_b5, c_b5)
+        test7 = (r_b6, c_b6)
         
         for building in this.buildings:
             if building.ret_type() == 4:
@@ -188,6 +197,18 @@ class Buildings:
                     elif test4 in attack_area:
                         if barbarian3.ret_isdead() == 0:
                             barbarian3.on_attack(2)
+                            attack = True
+                    elif test5 in attack_area:
+                        if archer1.ret_isdead() == 0:
+                            archer1.on_attack(2)
+                            attack = True
+                    elif test6 in attack_area:
+                        if archer2.ret_isdead() == 0:
+                            archer2.on_attack(2)
+                            attack = True
+                    elif test7 in attack_area:
+                        if archer3.ret_isdead() == 0:
+                            archer3.on_attack(2)
                             attack = True
                     
                     if(attack):

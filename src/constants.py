@@ -11,6 +11,7 @@ game_ht = (0, int(s_height / 1.1))  # height range of game in total screen
 # width range of game in total screen
 game_wd = (int(s_width / 5), int(s_width - int(s_width / 4)))
 frametransition = 0.07
+levels = 3
 
 # on completion of the game
 def over(buildings, x, result):
@@ -61,5 +62,6 @@ def over(buildings, x, result):
             + str("\n\t\t\t\t\t\t\tGAME RESULT: LOST\n")
             + Style.RESET_ALL
         )
+    print(x)
         # os.system("aplay -q ./sounds/victory.wav &")
     quit()

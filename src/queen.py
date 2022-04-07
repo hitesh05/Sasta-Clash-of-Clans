@@ -1,5 +1,5 @@
-from constants import *
-from king import *
+from src.constants import *
+from src.king import *
 from colorama import init, Fore, Back, Style
 
 init()

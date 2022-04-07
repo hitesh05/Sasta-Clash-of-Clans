@@ -122,17 +122,29 @@ class Balloon:
         b = c2 - c1
         return a, b
 
-    # archer attack
+    # balloon attack
     def attack(this, r, c, screen, buildings):
-        attack_area = [] # the area in which barbarian can attack
-        attack_area.append((r,c+1))
-        attack_area.append((r,c-1))
-        attack_area.append((r+1,c))
-        attack_area.append((r-1,c))
-        attack_area.append((r+1,c+1))
-        attack_area.append((r-1,c-1))
-        attack_area.append((r+1,c-1))
-        attack_area.append((r-1,c+1))
+        attack_area = set()
+        for i in range(this.ret_speed()):
+            for j in range(this.ret_speed()):
+                attack_area.add((r + i, c + j))
+                attack_area.add((r + i, c - j))
+                attack_area.add((r - i, c + j))
+                attack_area.add((r - i, c - j))
+
+        flag = 0
+        for i in range(this.ret_speed()):
+            for j in range(this.ret_speed()):
+                if (
+                        screen[r + i][c + j] != 0
+                        or screen[r + i][c - j] != 0
+                        or screen[r - i][c + j] != 0
+                        or screen[r - i][c - j] != 0
+                    ):
+                        flag = 1
+
+        if flag == 0:
+            return
 
         # checking which building lies in attack_area and attacking accordingly
         for building in buildings:
@@ -163,7 +175,6 @@ class Balloon:
         
                             test = (r1 + i, c1 + j)
                             if test in attack_area:
-            
                                 building.on_attack(this.ret_damage())
                                 flag = 1
                                 break
@@ -228,7 +239,7 @@ class Balloon:
                                 
             a, b = this.dist(r, c, x, y)
                                
-            if abs(a) <= this.ret_speed() and abs(b) <= this.ret_speed():
+            if abs(a) <= Barbarians().ret_speed() and abs(b) <= Barbarians().ret_speed():
                 this.attack(r, c, screen, buildings)
             else:
                 this.move(r, c, a, b, screen, buildings)

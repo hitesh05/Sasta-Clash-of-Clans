@@ -1,4 +1,4 @@
-from constants import *
+from src.constants import *
 from colorama import init, Fore, Back, Style
 
 init()
