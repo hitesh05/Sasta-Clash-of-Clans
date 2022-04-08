@@ -62,6 +62,6 @@ def over(buildings, x, result):
             + str("\n\t\t\t\t\t\t\tGAME RESULT: LOST\n")
             + Style.RESET_ALL
         )
-    # print(x)
+    print(x)
         # os.system("aplay -q ./sounds/victory.wav &")
     quit()

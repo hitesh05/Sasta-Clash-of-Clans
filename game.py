@@ -19,26 +19,6 @@ import time
 
 os.system("clear")
 
-# global comp_screen
-# global background
-# global buildings
-# global king
-# global queen
-# global spells
-# global barbarian1
-# global barbarian2
-# global barbarian3
-# global archer1
-# global archer2
-# global archer3
-# global balloon1
-# global balloon2
-# global balloon3
-# global get
-# global start_time
-# global render_time
-# global collapeseTime
-
 # setting area of screen where game will be played
 comp_screen = Screen(s_height, s_width)
 
@@ -93,7 +73,7 @@ level = Level()
 
 
 def reset():
-    x.append('here')
+    # x.append('here')
     global comp_screen
     global background
     # global buildings
@@ -121,7 +101,7 @@ def reset():
     background = Background()
 
     # creating instance for Buildings class
-    buildings = Buildings()
+    # buildings = Buildings()
 
     # creating instance for King class
     king = King()
@@ -274,6 +254,17 @@ def display(king, queen, i, dir, game):
             archer2,
             archer3,
         )
+        buildings.tower_attack(comp_screen.screen,
+            king,
+            barbarian1,
+            barbarian2,
+            barbarian3,
+            archer1,
+            archer2,
+            archer3,
+            balloon1,
+            balloon2,
+            balloon3)
     else:
         queen.show(comp_screen.screen)
         buildings.cannon_attack(
@@ -286,6 +277,17 @@ def display(king, queen, i, dir, game):
             archer2,
             archer3,
         )
+        buildings.tower_attack(comp_screen.screen,
+            queen,
+            barbarian1,
+            barbarian2,
+            barbarian3,
+            archer1,
+            archer2,
+            archer3,
+            balloon1,
+            balloon2,
+            balloon3)
     if active1 == 1:
         barbarian1.predict_path(comp_screen.screen, buildings.buildings)
         barbarian1.show(comp_screen.screen)
@@ -314,22 +316,24 @@ def display(king, queen, i, dir, game):
         balloon3.predict_path(comp_screen.screen, buildings.buildings)
         balloon3.show(comp_screen.screen)
     comp_screen.display(i, dir)
-    print("\033[0:0H")  # reposition the
+    print("\033[0:0H")  # reposition the cursor
 
 
-def level_up(buildings, x, result):
+def level_up(x, result):
     global level
-    x.append(level.ret_level())
+    global buildings
     if level.ret_level() == 3:
         over(buildings.buildings, x, result)
 
     level.upd_level(level.ret_level() + 1)
     reset()
-    # generate(buildings, 10, 3)
+    buildings = Buildings()
     if level.ret_level() == 2:
         generate(buildings, 10,3)
+        buildings.show(comp_screen.screen, x)
     elif level.ret_level() == 3:
-        generate(buildings, 15,5)
+        generate(buildings, 15,4)
+        buildings.show(comp_screen.screen, x)
 
 
 """
@@ -348,7 +352,7 @@ def get_input(pause, forward, game):
     global active8
     global active9
     ch = input_to(get, frametransition)
-    x.append(active1)
+    # x.append(active1)
 
     if ch == "w":
         if game == 0:
@@ -425,8 +429,6 @@ def get_input(pause, forward, game):
 
 # main function
 if __name__ == "__main__":
-    generate(buildings, 10, 2)  # number of huts and wizard towers
-
     # commands for replay
     i = 0
     path = "replays/"
@@ -467,6 +469,7 @@ if __name__ == "__main__":
     global active9
     active9 = 0
 
+    generate(buildings, 7, 2)  # number of huts and wizard towers
     while True:
         i += 1
         pause, forward = get_input(pause, forward, game)
@@ -480,7 +483,7 @@ if __name__ == "__main__":
         if time.time() - render_time >= frametransition:
             end, result = check_end(king, queen, buildings.buildings)
             if end == 1 and result == 1:
-                level_up(buildings, x, result)
+                level_up(x, result)
                 end = 0
                 result = 0
             elif end == 1 and result == 0:

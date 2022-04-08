@@ -22,7 +22,7 @@ class Buildings:
             this.a.append([])
             for j in range(game_wd[1]):
                 this.a[i].append(0)
-                
+
     # generating all the buildings
     def generator(this, cannons, towers):
         this.hall_generator()
@@ -59,18 +59,18 @@ class Buildings:
         for i in range(6):
             for j in range(5):
                 if i == 0 or i == 5 or j == 0 or j == 4:
-                    this.a[r + i][c + j] = 3
+                    this.a[r + i][c + j] = Wall().ret_type()
                 else:
                     this.a[r + i][c + j] = t.ret_type()
 
     def building_check(this, r, c, x):
-        if x == 2:
+        if x == Hut().ret_type():
             for i in range(4):
                 for j in range(4):
                     if this.a[r + i][c + j] != 0:
                         return 0
             return 1
-        elif x == 4 or x == 6:
+        elif x == Cannon().ret_type() or x == WizardTower().ret_type():
             if this.a[r][c] != 0:
                 return 0
             else:
@@ -82,7 +82,7 @@ class Buildings:
         while huts > 0:
             this.row = random.randint(2, game_ht[1] // 1.2)
             this.col = random.randint(game_wd[0] + 5, game_wd[1] - 10)
-            if this.building_check(this.row - 1, this.col - 1, 2):
+            if this.building_check(this.row - 1, this.col - 1, Hut().ret_type()):
                 huts -= 1
                 h = Hut()
                 h.upd_col(this.col)
@@ -94,9 +94,9 @@ class Buildings:
                 for i in range(4):
                     for j in range(4):
                         if i == 0 or i == 3 or j == 0 or j == 3:
-                            this.a[r + i][c + j] = 3
+                            this.a[r + i][c + j] = Wall().ret_type()
                         else:
-                            this.a[r + i][c + j] = 2
+                            this.a[r + i][c + j] = h.ret_type()
         return
 
     # 1x1 size generated randomly
@@ -105,32 +105,41 @@ class Buildings:
         while cannons > 0:
             this.row = random.randint(2, game_ht[1] // 1.2)
             this.col = random.randint(game_wd[0] + 5, game_wd[1] - 10)
-            if this.building_check(this.row, this.col, 4):
+            if this.building_check(this.row, this.col, Cannon().ret_type()):
                 c = Cannon()
                 c.upd_col(this.col)
                 c.upd_row(this.row)
                 this.buildings.append(c)
                 cannons -= 1
-                this.a[this.row][this.col] = 4
+                this.a[this.row][this.col] = c.ret_type()
         return
-    
+
     def tower_generator(this, number):
         towers = number
         while towers > number:
             this.row = random.randint(2, game_ht[1] // 1.2)
             this.col = random.randint(game_wd[0] + 5, game_wd[1] - 10)
-            if this.building_check(this.row, this.col, 6):
+            if this.building_check(this.row, this.col, WizardTower().ret_type()):
                 w = WizardTower()
                 w.upd_col(this.col)
                 w.upd_row(this.row)
                 this.buildings.append(w)
                 towers -= 1
-                this.a[this.row][this.col] = 6
+                this.a[this.row][this.col] = w.ret_type()
         return
-            
 
-    # cannon attack functio nwhen someone is in its vicinity (5 tile radius) : turns blue when its attacking
-    def cannon_attack(this, screen, king, barbarian1, barbarian2, barbarian3, archer1, archer2, archer3):
+    # cannon attack function when someone is in its vicinity (5 tile radius) : turns blue when its attacking
+    def cannon_attack(
+        this,
+        screen,
+        king,
+        barbarian1,
+        barbarian2,
+        barbarian3,
+        archer1,
+        archer2,
+        archer3,
+    ):
         r_king = king.ret_row()
         c_king = king.ret_col()
         r_b1 = barbarian1.ret_row()
@@ -152,9 +161,9 @@ class Buildings:
         test5 = (r_b4, c_b4)
         test6 = (r_b5, c_b5)
         test7 = (r_b6, c_b6)
-        
+
         for building in this.buildings:
-            if building.ret_type() == 4:
+            if building.ret_type() == Cannon().ret_type():
                 attack = False
                 if building.ret_isdestroyed() == 0:
                     r = building.ret_row()
@@ -183,40 +192,155 @@ class Buildings:
                         return
 
                     if test1 in attack_area:
-                        if(king.ret_isdead() == 0):
-                            king.on_attack(2)
+                        if king.ret_isdead() == 0:
+                            king.on_attack(Cannon().damage)
                             attack = True
                     elif test2 in attack_area:
-                        if(barbarian1.ret_isdead() == 0):
-                            barbarian1.on_attack(2)
+                        if barbarian1.ret_isdead() == 0:
+                            barbarian1.on_attack(Cannon().damage)
                             attack = True
                     elif test3 in attack_area:
                         if barbarian2.ret_isdead() == 0:
-                            barbarian2.on_attack(2)
+                            barbarian2.on_attack(Cannon().damage)
                             attack = True
                     elif test4 in attack_area:
                         if barbarian3.ret_isdead() == 0:
-                            barbarian3.on_attack(2)
+                            barbarian3.on_attack(Cannon().damage)
                             attack = True
                     elif test5 in attack_area:
                         if archer1.ret_isdead() == 0:
-                            archer1.on_attack(2)
+                            archer1.on_attack(Cannon().damage)
                             attack = True
                     elif test6 in attack_area:
                         if archer2.ret_isdead() == 0:
-                            archer2.on_attack(2)
+                            archer2.on_attack(Cannon().damage)
                             attack = True
                     elif test7 in attack_area:
                         if archer3.ret_isdead() == 0:
-                            archer3.on_attack(2)
+                            archer3.on_attack(Cannon().damage)
                             attack = True
-                    
-                    if(attack):
-                        screen[r][c] = 5
+
+                    if attack:
+                        screen[r][c] = Cannon().ret_type() + 1
                         os.system("aplay -q ./sounds/explosion.wav &")
                     else:
-                        screen[r][c] = 4            
-        
+                        screen[r][c] = Cannon().ret_type()
+
+    def tower_attack(
+        this,
+        screen,
+        king,
+        barbarian1,
+        barbarian2,
+        barbarian3,
+        archer1,
+        archer2,
+        archer3,
+        balloon1,
+        balloon2,
+        balloon3,
+    ):
+        r_king = king.ret_row()
+        c_king = king.ret_col()
+        r_b1 = barbarian1.ret_row()
+        c_b1 = barbarian1.ret_col()
+        r_b2 = barbarian2.ret_row()
+        c_b2 = barbarian2.ret_col()
+        r_b3 = barbarian3.ret_row()
+        c_b3 = barbarian3.ret_col()
+        r_b4 = archer1.ret_row()
+        c_b4 = archer1.ret_col()
+        r_b5 = archer2.ret_row()
+        c_b5 = archer2.ret_col()
+        r_b6 = archer3.ret_row()
+        c_b6 = archer3.ret_col()
+        r_7 = balloon1.ret_row()
+        c_7 = balloon1.ret_col()
+        r_8 = balloon2.ret_row()
+        c_8 = balloon2.ret_col()
+        r_9 = balloon3.ret_row()
+        c_9 = balloon3.ret_col()
+        test1 = (r_king, c_king)
+        test2 = (r_b1, c_b1)
+        test3 = (r_b2, c_b2)
+        test4 = (r_b3, c_b3)
+        test5 = (r_b4, c_b4)
+        test6 = (r_b5, c_b5)
+        test7 = (r_b6, c_b6)
+        test8 = (r_7, c_7)
+        test9 = (r_8, c_8)
+        test10 = (r_9, c_9)
+
+        for building in this.buildings:
+            if building.ret_type() == WizardTower().ret_type():
+                attack = False
+                if building.ret_isdestroyed() == 0:
+                    x = king
+
+                    if balloon1.ret_active():
+                        x = balloon1
+                    elif balloon2.ret_active():
+                        x = balloon2
+                    elif balloon3.ret_active():
+                        x = balloon3
+
+                    r = x.ret_row()
+                    c = x.ret_col()
+
+                    attack_area = set()
+
+                    # setting attack_area
+                    for i in range(3):
+                        for j in range(3):
+                            attack_area.add((r + i, c + j))
+                            attack_area.add((r + i, c - j))
+                            attack_area.add((r - i, c + j))
+                            attack_area.add((r - i, c - j))
+
+                    if test1 in attack_area:
+                        if king.ret_isdead() == 0:
+                            king.on_attack(WizardTower().damage)
+                            attack = True
+                    if test2 in attack_area:
+                        if barbarian1.ret_isdead() == 0:
+                            barbarian1.on_attack(WizardTower().damage)
+                            attack = True
+                    if test3 in attack_area:
+                        if barbarian2.ret_isdead() == 0:
+                            barbarian2.on_attack(WizardTower().damage)
+                            attack = True
+                    if test4 in attack_area:
+                        if barbarian3.ret_isdead() == 0:
+                            barbarian3.on_attack(WizardTower().damage)
+                            attack = True
+                    if test5 in attack_area:
+                        if archer1.ret_isdead() == 0:
+                            archer1.on_attack(WizardTower().damage)
+                            attack = True
+                    if test6 in attack_area:
+                        if archer2.ret_isdead() == 0:
+                            archer2.on_attack(WizardTower().damage)
+                            attack = True
+                    if test7 in attack_area:
+                        if archer3.ret_isdead() == 0:
+                            archer3.on_attack(WizardTower().damage)
+                            attack = True
+                    if test8 in attack_area:
+                        if balloon1.ret_isdead() == 0:
+                            balloon1.on_attack(WizardTower().damage)
+                    if test9 in attack_area:
+                        if balloon2.ret_isdead() == 0:
+                            balloon2.on_attack(WizardTower().damage)
+                    if test10 in attack_area:
+                        if balloon3.ret_isdead() == 0:
+                            balloon3.on_attack(WizardTower().damage)
+
+                    if attack:
+                        screen[r][c] = WizardTower().ret_type() + 1
+                        os.system("aplay -q ./sounds/explosion.wav &")
+                    else:
+                        screen[r][c] = WizardTower().ret_type()
+
     # showing all the buildings
     def show(this, screen, x):
         for i in range(game_ht[1]):
@@ -224,20 +348,18 @@ class Buildings:
                 if this.a[i][j] != 0 and screen[i][j] == " ":
                     screen[i][j] = this.a[i][j]
         for building in this.buildings:
-            if building.ret_type() != 3:
+            if building.ret_type() != Wall().ret_type():
                 s1 = building.ret_row_size()
                 s2 = building.ret_col_size()
                 if building.ret_isdestroyed() == 1:
                     for i in range(s1):
                         for j in range(s2):
-                            # x.append("here")
                             screen[building.ret_row() + i][building.ret_col() + j] = " "
 
-            elif building.ret_type() == 3:
+            elif building.ret_type() == Wall().ret_type():
                 s1 = building.ret_row_size()
                 s2 = building.ret_col_size()
-                # x.append('here1')
-
+                
                 if building.ret_isdestroyed() == 1:
                     for i in range(s1):
                         for j in range(s2):
@@ -251,6 +373,7 @@ class Buildings:
 
 
 # Inheritance implemented. Building is the parent class. Town Hall, Huts, Cannon, Wall are child classes.
+
 
 class Building:
     # Building Object
@@ -348,7 +471,8 @@ class Cannon(Building):
         this.upd_col_size(1)
         this.range = 5  # 5 tiles
         this.damage = 2  # 1 shot = 2 health
-        
+
+
 class WizardTower(Building):
     def __init__(this):
         Building.__init__(this)
@@ -356,5 +480,5 @@ class WizardTower(Building):
         this.upd_health(20)
         this.upd_row_size(1)
         this.upd_col_size(1)
-        this.range = Cannon().range # same as cannon
+        this.range = Cannon().range  # same as cannon
         this.damage = Cannon().damage

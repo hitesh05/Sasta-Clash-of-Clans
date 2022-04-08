@@ -86,7 +86,7 @@ class King:
         c = this.ret_col()
         attack_area = set()
         
-         # setting attack_area
+        # setting attack_area
         for i in range(5):
             for j in range(5):
                 attack_area.add((r + i, c + j))
@@ -104,6 +104,7 @@ class King:
                     or screen[r - i][c - j] != 0
                 ):
                     flag = 1
+                    break
 
         if flag == 0:
             return
