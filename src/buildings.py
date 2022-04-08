@@ -116,7 +116,7 @@ class Buildings:
     
     def tower_generator(this, number):
         towers = number
-        while towers > 2:
+        while towers > number:
             this.row = random.randint(2, game_ht[1] // 1.2)
             this.col = random.randint(game_wd[0] + 5, game_wd[1] - 10)
             if this.building_check(this.row, this.col, 6):

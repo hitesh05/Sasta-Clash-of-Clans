@@ -1,3 +1,4 @@
+from distutils.command.build import build
 import os
 from tracemalloc import start
 
@@ -17,6 +18,26 @@ import time
 
 
 os.system("clear")
+
+# global comp_screen
+# global background
+# global buildings
+# global king
+# global queen
+# global spells
+# global barbarian1
+# global barbarian2
+# global barbarian3
+# global archer1
+# global archer2
+# global archer3
+# global balloon1
+# global balloon2
+# global balloon3
+# global get
+# global start_time
+# global render_time
+# global collapeseTime
 
 # setting area of screen where game will be played
 comp_screen = Screen(s_height, s_width)
@@ -67,13 +88,15 @@ collapeseTime = time.time()
 pause = 0
 forward = 0
 x = []
-global level
+# global level
 level = Level()
 
+
 def reset():
+    x.append('here')
     global comp_screen
     global background
-    global buildings
+    # global buildings
     global king
     global queen
     global spells
@@ -110,24 +133,33 @@ def reset():
     spells = Spells()
 
     # creating 1st troop
+    barbarian1.reset()
     barbarian1 = Barbarians()
+    archer1.reset()
     archer1 = Archer()
+    balloon1.reset()
     balloon1 = Balloon()
     barbarian1.upd_col(game_wd[0] + 1)
     archer1.upd_col(game_wd[0] + 1)
     balloon1.upd_col(game_wd[0] + 1)
 
     # creating 2nd troop
+    barbarian2.reset()
     barbarian2 = Barbarians()
+    archer2.reset()
     archer2 = Archer()
+    balloon2.reset()
     balloon2 = Balloon()
     barbarian2.upd_col(game_wd[0] + 11)
     archer2.upd_col(game_wd[0] + 11)
     balloon2.upd_col(game_wd[0] + 11)
 
     # creating 3rd troop
+    barbarian3.reset()
     barbarian3 = Barbarians()
+    archer3.reset()
     archer3 = Archer()
+    balloon3.reset()
     balloon3 = Balloon()
     barbarian3.upd_col(game_wd[0] + 21)
     archer3.upd_col(game_wd[0] + 21)
@@ -137,12 +169,32 @@ def reset():
     start_time = time.time()
     render_time = time.time()
     collapeseTime = time.time()
+    
+    global active1
+    active1 = 0
+    global active2
+    active2 = 0
+    global active3
+    active3 = 0
+    global active4
+    active4 = 0
+    global active5
+    active5 = 0
+    global active6
+    active6 = 0
+    global active7
+    active7 = 0
+    global active8
+    active8 = 0
+    global active9
+    active9 = 0
+    
     os.system("clear")
 
 
 # generating all the buildings
 def generate(buildings, cannons, towers):
-    buildings.generator(cannons,towers)
+    buildings.generator(cannons, towers)
 
 
 # for pausing the game
@@ -151,10 +203,10 @@ def toggle_pause(pause):
 
 
 # checking if the game has ended (king has died or all the buildings have been destroyed)
-def check_end(king, buildings):
+def check_end(king, queen, buildings):
     result = 0
     end = 0
-    if king.ret_isdead():
+    if king.ret_isdead() or queen.ret_isdead():
         end = 1
         result = 0
         return end, result
@@ -197,7 +249,7 @@ i.e all the buildings, king, and barbarians (if they have been activated)
 """
 
 
-def display(king, i, dir, game):
+def display(king, queen, i, dir, game):
     global active1
     global active2
     global active3
@@ -212,18 +264,28 @@ def display(king, i, dir, game):
     buildings.show(comp_screen.screen, x)
     if game == 0:
         king.show(comp_screen.screen)
+        buildings.cannon_attack(
+            comp_screen.screen,
+            king,
+            barbarian1,
+            barbarian2,
+            barbarian3,
+            archer1,
+            archer2,
+            archer3,
+        )
     else:
         queen.show(comp_screen.screen)
-    buildings.cannon_attack(
-        comp_screen.screen,
-        king,
-        barbarian1,
-        barbarian2,
-        barbarian3,
-        archer1,
-        archer2,
-        archer3,
-    )
+        buildings.cannon_attack(
+            comp_screen.screen,
+            queen,
+            barbarian1,
+            barbarian2,
+            barbarian3,
+            archer1,
+            archer2,
+            archer3,
+        )
     if active1 == 1:
         barbarian1.predict_path(comp_screen.screen, buildings.buildings)
         barbarian1.show(comp_screen.screen)
@@ -253,7 +315,7 @@ def display(king, i, dir, game):
         balloon3.show(comp_screen.screen)
     comp_screen.display(i, dir)
     print("\033[0:0H")  # reposition the
-    
+
 
 def level_up(buildings, x, result):
     global level
@@ -261,8 +323,9 @@ def level_up(buildings, x, result):
     if level.ret_level() == 3:
         over(buildings.buildings, x, result)
 
-    level.upd_level(level.ret_level() + 1)  
+    level.upd_level(level.ret_level() + 1)
     reset()
+    # generate(buildings, 10, 3)
     if level.ret_level() == 2:
         generate(buildings, 10,3)
     elif level.ret_level() == 3:
@@ -272,6 +335,7 @@ def level_up(buildings, x, result):
 """
 getting input from user and executing the commands
 """
+
 
 def get_input(pause, forward, game):
     global active1
@@ -300,7 +364,7 @@ def get_input(pause, forward, game):
         if game == 0:
             king.move_down(comp_screen.screen)
         else:
-                queen.move_down(comp_screen.screen)
+            queen.move_down(comp_screen.screen)
     if ch == "d":
         if game == 0:
             king.move_right(comp_screen.screen)
@@ -361,7 +425,7 @@ def get_input(pause, forward, game):
 
 # main function
 if __name__ == "__main__":
-    generate(buildings,10,2) # number of huts and wizard towers
+    generate(buildings, 10, 2)  # number of huts and wizard towers
 
     # commands for replay
     i = 0
@@ -370,7 +434,7 @@ if __name__ == "__main__":
     dir += 1
     command = "mkdir replays/" + str(dir)
     os.system(command)
-    
+
     hero = 2
     while hero != 0 or hero != 1:
         hero = int(input("Who is your hero?\n 0. King\n 1.Queen\n"))
@@ -378,7 +442,7 @@ if __name__ == "__main__":
             "incorrect input yr"
         else:
             break
-    
+
     game = 0
     if hero:
         game = 1
@@ -414,13 +478,17 @@ if __name__ == "__main__":
             pause, forward = get_input(pause, forward, game)
 
         if time.time() - render_time >= frametransition:
-            end, result = check_end(king, buildings.buildings)
-            if end==1 and result==1:
+            end, result = check_end(king, queen, buildings.buildings)
+            if end == 1 and result == 1:
                 level_up(buildings, x, result)
+                end = 0
+                result = 0
             elif end == 1 and result == 0:
+                end = 0
+                result = 0
                 over(buildings.buildings, x, result)
 
-            display(king, i, dir, game)
+            display(king, queen, i, dir, game)
             if game == 0:
                 display_healthbar(king.ret_health(), king.ret_total_health(), 20)
             else:

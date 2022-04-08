@@ -129,7 +129,7 @@ class Queen:
             return
 
         # sword sound every time queen attacks
-        os.system("aplay -q ./sounds/sword.wav &")
+        os.system("aplay -q ./src/sounds/sword.wav &")
 
         for building in buildings:
             t = building.ret_type()

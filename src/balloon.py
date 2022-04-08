@@ -94,7 +94,7 @@ class Balloon:
         this.upd_isdead(0)
         this.upd_speed(Barbarians().ret_speed() * 2)
         this.upd_damage(Barbarians().ret_health() * 2)
-        this.upd_archer("G")
+        this.upd_balloon("G")
 
     def clear(this, screen):
         screen[this.ret_row()][this.ret_col()] = " "
@@ -185,13 +185,17 @@ class Balloon:
     def move(this, r, c, a, b, screen, buildings):
         this.clear(screen)
         if a < 0:
-            this.upd_row(r - this.ret_speed())
+            if screen[r - this.ret_speed()][c] != "G":
+                this.upd_row(r - this.ret_speed())
         if a > 0:
-            this.upd_row(r + this.ret_speed())
+            if screen[r + this.ret_speed()][c] != "G":
+                this.upd_row(r + this.ret_speed())
         if b > 0:
-            this.upd_col(c + this.ret_speed())
+            if screen[r][c + this.ret_speed()] != "G":
+                this.upd_col(c + this.ret_speed())
         if b < 0:
-            this.upd_col(c - this.ret_speed())
+            if screen[r][c - this.ret_speed()] != "G":
+                this.upd_col(c - this.ret_speed())
 
     '''
     predicting path of ballon
