@@ -85,13 +85,18 @@ python3 ./game.py
 Sasta Clash of Clans is inspired from the widely popular game CoC. 
 
 + ### Elements
+    - 3 levels implemented. You move n to the next level if you win in the previous one. Each level has a higher number of defensive buildings to increase the difficulty. 
     - Village: There are multiple buildings in the village.
         - Town Hall: Main building. 4x3 in size. Hitpoints = 100. Only 1 at the center of every village. Yellow in colour.
         - Huts: 5 huts spread around the village. 2x2 in size. Hitpoints = 50. Blue in colour.
         - Walls: Surround both Huts and Town Hall by default. Hitpoints = 30. Red in colour. 
-        - Cannon: Defence mechanism of the village. 1x1 in size. 7 in number spread around the village. Deal a damage of health = 2 per shot. Pink in colour, turn blue while they are engaged with a troop or the king. Hitpoints = 20. Engage with anyone in a 5 tile radius.
-    - King: The main guy of the invading party. Hitpoints = 100. Deals a damge = 10 health per shot. Initial speed of 1 which can be increased by using spells. Moves up/down/left/right. Space is used to attack. Health bar is displayed at the side of the screen. *Leviathan axe* implemented. Attacks any building in a 5 tile radius. 
+        - Cannon: Defence mechanism of the village. 1x1 in size. 7 in number spread around the village (10 in level 2 and 15 in level 3). Deal a damage of health = 2 per shot. Pink in colour, turn blue while they are engaged with a troop or the king. Hitpoints = 20. Engage with anyone in a 5 tile radius. Cannot attack aerial troops. 
+        - Wizard Tower: Similar to cannon. Extra health to balance out the game. Hitpoints = 200. Light blue in colour, turn green when attacking. 2 in level 1, 3 in level 2, 4 in level 3 spread around the village. 1x1 in size.
+    - King: The main guy of the invading party. Hitpoints = 100. Deals a damge = 10 health per shot. Initial speed of 1 which can be increased by using spells. Moves up/down/left/right. Space is used to attack. Health bar is displayed at the side of the screen. *Leviathan axe* implemented. Attacks any building in a 5 tile radius.
+    - Queen: Added in 2nd part of assignment. Option given at the start of the game to choose either King or Queen. Similar to King. 10 less hitpints than the king. Uses arrows to attack 8 tiles away and in a radius of 5x5. Damage is also less than the King.
     - Barbaians: 3 spawning points, controlled by 3 different buttons. When you press the button, they appear the button and their movements from then on are automated. They move to the closest building from their coordinate (according to Euclidean distance), and when they reach the building they attack. Hitpoints = 20. Deal a damage of 5 health per shot. Can be increased using spells. The colour of the barbarian dims when the less than 50% of the health is remaining.
+    - Archers: 3 spawning points, controlled by 3 different buttons. When you press the button, they appear the button and their movements from then on are automated. They move to the closest building from their coordinate (according to Euclidean distance), and when they reach the building they attack. Half the health of barbarian, half the damge and twice the movement speed. Can be increased using spells. 
+    - Balloons: Aerial troop. 3 spawning points, controlled by 3 different buttons. When you press the button, they appear the button and their movements from then on are automated. Prioritise attacking the cannons and wizard towers first. Then move on to the other buildings in the village. Can move over other buildings, that is they cannot stop its progress. Twice the damage of the barbarians, same health and twice the movement speed. 
     - Spells: Rage spell increases damage per shot (2 times) and movement speed (2 times) of all alive troops in the game. Can only be used once in the game. Heal spell icreases health (1.5 times) of all alive troops in the game. Can only be used once in the game.
     - Replay: Replays of all the games played are available. Run the replay.py file and choose the game number you want to replay.
 
@@ -105,10 +110,16 @@ Sasta Clash of Clans is inspired from the widely popular game CoC.
     - 'l' - activate 1st barbarian.
     - 'm' - activate 2nd barbarian.
     - 'n' - activate 3rd barbarian.
+    - 'u' - activate 1st archer.
+    - 'i' - activate 2nd archer.
+    - 'o' - activate 3rd archer.
+    - 'z' - activate 1st balloon.
+    - 'x' - activate 2nd balloon.
+    - 'c' - activate 3rd balloon.
     - 'r' - activate rage spell.
     - 'h' - activate heal spell.
     - 'q' - quit the game.
 
 + ### Rules
- - Win: When all the buildings have been destroyed and the King is alive.
- - Loss: If the King dies or you quit the game.
+ - Win: When all the buildings have been destroyed of all the 3 levels and the King or Queen is alive.
+ - Loss: If the King or Queen dies or you quit (q) the game.

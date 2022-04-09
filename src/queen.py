@@ -14,7 +14,7 @@ class Queen:
         this.__isdead = 0
         this.__last_move = 1 # 1: up 2: down 3: left 4: right
         this.__speed = King().ret_speed()
-        this.__damage = 10
+        this.__damage = King().ret_damage() - 1
         this.__queen = "Q" # symbol for queen
 
     # encapsulation
