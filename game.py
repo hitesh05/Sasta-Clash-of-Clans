@@ -173,8 +173,8 @@ def reset():
 
 
 # generating all the buildings
-def generate(buildings, cannons, towers):
-    buildings.generator(cannons, towers)
+def generate(buildings, cannons, towers, x):
+    buildings.generator(cannons, towers, x)
 
 
 # for pausing the game
@@ -242,6 +242,8 @@ def display(king, queen, i, dir, game):
     # x.append(active1)
     background.show(comp_screen.screen)
     buildings.show(comp_screen.screen, x)
+    # if len(x) == 0:
+    #     x.append(comp_screen.screen) 
     if game == 0:
         king.show(comp_screen.screen)
         buildings.cannon_attack(
@@ -329,10 +331,12 @@ def level_up(x, result):
     reset()
     buildings = Buildings()
     if level.ret_level() == 2:
-        generate(buildings, 10,3)
+        generate(buildings, 10,3, x)
+        # x.append(comp_screen.screen)
         buildings.show(comp_screen.screen, x)
     elif level.ret_level() == 3:
-        generate(buildings, 15,4)
+        generate(buildings, 15,4,x)
+        # x.append(comp_screen.screen)
         buildings.show(comp_screen.screen, x)
 
 
@@ -418,9 +422,9 @@ def get_input(pause, forward, game):
         active9 = 1
         balloon3.upd_active(active9)
     if ch == "r":
-        spells.spell(barbarian1, barbarian2, barbarian3, king)
+        spells.spell(barbarian1, barbarian2, barbarian3, king, archer1, archer2, archer3, balloon1, balloon2, balloon3)
     if ch == "h":
-        spells.spell(barbarian1, barbarian2, barbarian3, king, 1)
+        spells.spell(barbarian1, barbarian2, barbarian3, king, archer1, archer2, archer3, balloon1, balloon2, balloon3, 1)
     if ch == "q":
         over(buildings.buildings, x, 0)
 
@@ -469,7 +473,7 @@ if __name__ == "__main__":
     global active9
     active9 = 0
 
-    generate(buildings, 7, 2)  # number of huts and wizard towers
+    generate(buildings, 7, 2, x)  # number of huts and wizard towers
     while True:
         i += 1
         pause, forward = get_input(pause, forward, game)

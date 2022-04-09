@@ -38,7 +38,7 @@ class Spells:
     Polymorphism implemented (same function name, different number of arguments)
     """
     # Rage/Heal Spell
-    def spell(this, barbarian1, barbarian2, barbarian3, king, heal=0):
+    def spell(this, barbarian1, barbarian2, barbarian3, king, archer1, archer2, archer3, balloon1, balloon2, balloon3, heal=0):
         x = this.ret_healrem()
         if heal == 1:
             if x > 0:
@@ -67,6 +67,43 @@ class Spells:
                     if health > barbarian3.ret_total_health():
                         health = barbarian3.ret_total_health()
                     barbarian3.upd_health(health)
+                if archer1.ret_active():
+                    health = archer1.ret_health()
+                    health = health * this.ret_health()
+                    if health > archer1.ret_total_health():
+                        health = archer1.ret_total_health()
+                    archer1.upd_health(health)
+                if archer2.ret_active():
+                    health = archer2.ret_health()
+                    health = health * this.ret_health()
+                    if health > archer2.ret_total_health():
+                        health = archer2.ret_total_health()
+                    archer2.upd_health(health)
+                if archer3.ret_active():
+                    health = archer3.ret_health()
+                    health = health * this.ret_health()
+                    if health > archer3.ret_total_health():
+                        health = archer3.ret_total_health()
+                    archer3.upd_health(health)
+                if balloon1.ret_active():
+                    health = balloon1.ret_health()
+                    health = health * this.ret_health()
+                    if health > balloon1.ret_total_health():
+                        health = balloon1.ret_total_health()
+                    balloon1.upd_health(health)
+                if balloon2.ret_active():
+                    health = balloon2.ret_health()
+                    health = health * this.ret_health()
+                    if health > balloon2.ret_total_health():
+                        health = balloon2.ret_total_health()
+                    balloon2.upd_health(health)
+                if balloon3.ret_active():
+                    health = balloon3.ret_health()
+                    health = health * this.ret_health()
+                    if health > balloon3.ret_total_health():
+                        health = balloon3.ret_total_health()
+                    balloon3.upd_health(health)
+                    
         else:
             x = this.ret_ragerem()
             if x > 0:
@@ -99,5 +136,45 @@ class Spells:
                     speed = speed * this.ret_speed()
                     barbarian3.upd_damage(damage)
                     barbarian3.upd_speed(speed)
-                
-
+                if archer1.ret_active() == 1:
+                    damage = archer1.ret_damage()
+                    damage = damage * this.ret_damage()
+                    speed = archer1.ret_speed()
+                    speed = speed * this.ret_speed()
+                    archer1.upd_damage(damage)
+                    archer1.upd_speed(speed)
+                if archer2.ret_active() == 1:
+                    damage = archer2.ret_damage()
+                    damage = damage * this.ret_damage()
+                    speed = archer2.ret_speed()
+                    speed = speed * this.ret_speed()
+                    archer2.upd_damage(damage)
+                    archer2.upd_speed(speed)
+                if archer3.ret_active() == 1:
+                    damage = archer3.ret_damage()
+                    damage = damage * this.ret_damage()
+                    speed = archer3.ret_speed()
+                    speed = speed * this.ret_speed()
+                    archer3.upd_damage(damage)
+                    archer3.upd_speed(speed)
+                if balloon1.ret_active() == 1:
+                    damage = balloon1.ret_damage()
+                    damage = damage * this.ret_damage()
+                    speed = balloon1.ret_speed()
+                    speed = speed * this.ret_speed()
+                    balloon1.upd_damage(damage)
+                    balloon1.upd_speed(speed)
+                if balloon2.ret_active() == 1:
+                    damage = balloon2.ret_damage()
+                    damage = damage * this.ret_damage()
+                    speed = balloon2.ret_speed()
+                    speed = speed * this.ret_speed()
+                    balloon2.upd_damage(damage)
+                    balloon2.upd_speed(speed)
+                if balloon3.ret_active() == 1:
+                    damage = balloon3.ret_damage()
+                    damage = damage * this.ret_damage()
+                    speed = balloon3.ret_speed()
+                    speed = speed * this.ret_speed()
+                    balloon3.upd_damage(damage)
+                    balloon3.upd_speed(speed)
